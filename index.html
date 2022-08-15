@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>医界圈</title>
+		<!-- 引入elemnet ui样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<link rel="stylesheet/less" type="text/css" href="./less/index.less" />
+		<link rel="stylesheet" type="text/css" href="./css/reset.css" />
+		<link rel="stylesheet" type="text/css" href="./css/iconfont.css" />
+		<script src="./js/vue.js"></script>
+		<script src="./js/less.js" type="text/javascript"></script>
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+	</head>
+	<body>
+		<div class="index-body" id="app">
+			<!-- 顶部模块 购物车 -->
+			<div class="shop-box">
+				<div class="shop-content">
+					<ul>
+						<li>购物车</li>
+						<li>会员中心</li>
+						<li>供应商入驻</li>
+						<li>特色专区</li>
+					</ul>
+					<p>400-123-1234</p>
+				</div>
+			</div>
+			<!-- 模块一 -->
+			<el-container class="module0-header">
+				<!-- 头部搜索一栏 -->
+				<el-header>
+					<div class="content">
+						<div class="log-box">
+							<img src="./img/logo.png" class="herder-logo" />
+						</div>
+						<div class="search">
+							<el-select v-model="searchData.item" placeholder="请选择" class="search-select">
+								<el-option v-for="item in options" :key="item.value" :label="item.label"
+									:value="item.value">
+								</el-option>
+							</el-select>
+							<el-input v-model="searchData.key" class="search-input" placeholder="输入相关产品名或企业名">
+							</el-input>
+							<el-button class="search-btn">
+								<img src="./img/search.png" alt=""> 搜索
+							</el-button>
+						</div>
+						<div class="header-btn">
+							<el-button class="btn-login">登录</el-button>
+							<el-button type="primary" class="btn-register">注册</el-button>
+						</div>
+					</div>
+				</el-header>
+			</el-container>
+			<!-- 模块二 -->
+			<el-container class="module1-content index-content">
+				<!-- 主体内容 -->
+				<el-container class="index-main">
+					<!-- 左侧导航 -->
+					<el-aside width="240px" class="main-aside">
+						<img src="./img/brand_type.png" />
+						<ul class="brand-nav-box">
+							<li v-for="(item,index) in brandList" :key="item.id" @mouseenter="enterClass(item.id)"
+								@mouseout="leaveClass()">{{item.name}}
+								<img src="./img/right.png" alt="">
+							</li>
+						</ul>
+						<div class="more-brands">
+							<p>更多品牌</p>
+							<img src="./img/double-right.png" alt="">
+						</div>
+					</el-aside>
+
+					<!-- 右边内容-->
+					<el-main>
+						<!-- 头部导航 -->
+						<div class="main-header-nav">
+							<!-- <equip-nav></equip-nav> -->
+							<ul>
+								<li v-for="(item,index) in chooseItemData" :key="index" @click="chooseClick(index)"
+									:class="{'selected':selectIndex == index }">
+									{{item.name}}
+								</li>
+							</ul>
+						</div>
+						<!-- 中间设备列表 + 右边发布需求 -->
+						<div class="main-content">
+							<!-- 中间设备列表 -->
+							<div class="main-content-left">
+								<div class="listicarts">
+									<div class="item-cart" v-for="(item,index) in equipLists" :key="item.id">
+										<!-- <img :src="item.imgPath" alt="图片无法加载"> -->
+										<img src="./img/equip1.png" alt="图片无法加载">
+										<p class="name">{{item.name}}</p>
+										<p class="remark">{{item.remark}}</p>
+									</div>
+								</div>
+							</div>
+							<!-- 右边发布需求 -->
+							<div class="main-content-right">
+								<!-- 发布需求 -->
+								<div class="release-demand">
+									<img src="./img/publish.png" alt="">
+									<div class="titles">
+										<p class="title1">发布需求</p>
+										<p class="title2">求购设备、提供设备</p>
+										<button class="btn">立即发布</button>
+									</div>
+								</div>
+								<!-- 热门求购 -->
+								<div class="hot-shop-box">
+									<div class="hot-title">
+										<img src="./img/bookmark-one.png" alt="">
+										<div class="hot-text">
+											<p class="text1">热门求购</p>
+											<p class="text2">各大医疗器械热门求购</p>
+										</div>
+									</div>
+									<ul class="hot-list">
+										<li> <img src="./img/circular.png" alt="" /> 动态血压记录分析系统</li>
+										<li> <img src="./img/circular.png" alt="" /> 动态血压记录分析系统</li>
+										<li> <img src="./img/circular.png" alt="" /> 动态血压记录分析系统</li>
+										<li> <img src="./img/circular.png" alt="" /> 动态血压记录分析系统</li>
+										<li> <img src="./img/circular.png" alt="" /> 动态血压记录分析系统</li>
+										<li> <img src="./img/circular.png" alt="" /> 动态血压记录分析系统</li>
+										<li> <img src="./img/circular.png" alt="" /> 动态血压记录分析系统</li>
+										<li> <img src="./img/circular.png" alt="" /> 动态血压记录分析系统</li>
+										<li> <img src="./img/circular.png" alt="" /> 动态血压记录分析系统</li>
+										<li> <img src="./img/circular.png" alt="" /> 动态血压记录分析系统</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</el-main>
+					<!-- 左侧导航条悬浮显示的内容 -->
+					<div class="more-classification" v-show="isShow" @mouseover="enterClass()" @mouseout="leaveClass()">
+						<div class="item" v-for="(item,index) in classDatas" :key="index">
+							<div class="title">{{item.name}}</div>
+							<ul>
+								<li v-for="(child,ind) in item.childers" :key="ind">{{child.name}}</li>
+							</ul>
+						</div>
+					</div>
+				</el-container>
+			</el-container>
+			<!-- 模块三 四张大图 -->
+			<div class="modle3-picture">
+				<div class="picture-item">
+					<img src="./img/pic_540.png" alt="图片无法加载">
+					<div class="name">西门子MR扫描仪</div>
+				</div>
+				<div class="picture-item">
+					<img src="./img/equip1.png" alt="图片无法加载">
+					<div class="name">西门子MR扫描仪</div>
+				</div>
+				<div class="picture-item">
+					<img src="./img/pic_540.png" alt="图片无法加载">
+					<div class="name">西门子MR扫描仪</div>
+				</div>
+				<div class="picture-item">
+					<img src="./img/equip1.png" alt="图片无法加载">
+					<div class="name">西门子MR扫描仪</div>
+				</div>
+			</div>
+			<!-- 模块四 企业服务 -->
+			<div class="modle4-enter-service">
+				<div class="enter-service-header">
+					<div class="service-choose">
+						<div class="modle-title">企业服务</div>
+						<ul>
+							<li>核磁共振</li>
+							<li>核磁共振</li>
+							<li>核磁共振</li>
+							<li>核磁共振</li>
+							<li>核磁共振</li>
+							<li>核磁共振</li>
+						</ul>
+					</div>
+					<img src="./img/majorRepair.png" alt="">
+				</div>
+				<div class="list-item-pages">
+					<div class="item" v-for="(item,index) in data4List" :key=item.id>
+						<img src="./img/equip1.png" alt="">
+						<div class="name">{{item.name}}</div>
+						<div class="remark">
+							<p class="price">{{item.price}}</p>
+							<div class="address">
+								<img src="./img/local-two.png" alt="" class="address-img">{{item.address}}
+							</div>
+						</div>
+						<button class="btn"><img src="./img/zxfw.png" alt="">在线咨询</button>
+					</div>
+				</div>
+			</div>
+			<!-- 模块五 个人工程师 -->
+			<div class="modle5-enter-service">
+				<div class="enter-service-header">
+					<div class="service-choose">
+						<div class="modle-title">个人工程师</div>
+						<ul>
+							<li>核磁共振</li>
+							<li>核磁共振</li>
+							<li>核磁共振</li>
+							<li>核磁共振</li>
+							<li>核磁共振</li>
+							<li>核磁共振</li>
+						</ul>
+					</div>
+					<img src="./img/majorRepair.png" alt="">
+				</div>
+				<div class="list-item-pages">
+					<div class="item" v-for="(item,index) in data5List" :key=item.id>
+						<img src="./img/equip1.png" alt="" />
+						<div class="item-right">
+							<div class="name">
+								<p> {{item.name}}</p>
+							</div>
+							<div class="remark">
+								<p class="price">{{item.price}}</p>
+								<div class="address">
+									<img src="./img/local-two.png" alt="" class="address-img">{{item.address}}
+								</div>
+							</div>
+							<button class="btn"><img src="./img/zxfw.png" alt="">在线咨询</button>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<!-- 模块六 两张大图 -->
+			<div class="modle6-pic">
+				<img src="./img/pic_jineng.png" alt="">
+				<img src="./img/pic_xuqiu.png" alt="">
+			</div>
+			<!-- 模块七 四大模块 -->
+			<div class="model7-box">
+				<div class="content">
+					<div class="item">
+						<img src="./img/modle7_item1.png" alt="">
+						<div class="title">
+							<p class="name">专业服务</p>
+							<p class="remark">服务3100万用户，覆盖各类服务</p>
+						</div>
+					</div>
+					<div class="item">
+						<img src="./img/modle7_item1.png" alt="">
+						<div class="title">
+							<p class="name">资金安全</p>
+							<p class="remark">服务3100万用户，覆盖各类服务</p>
+						</div>
+					</div>
+					<div class="item">
+						<img src="./img/modle7_item1.png" alt="">
+						<div class="title">
+							<p class="name">专业服务</p>
+							<p class="remark">服务3100万用户，覆盖各类服务</p>
+						</div>
+					</div>
+					<div class="item">
+						<img src="./img/modle7_item1.png" alt="">
+						<div class="title">
+							<p class="name">专业服务</p>
+							<p class="remark">服务3100万用户，覆盖各类服务</p>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<!-- 模块八 关于商城 -->
+			<div class="modle8-box">
+				<div class="content">
+					<div class="item-left">
+						<div class="left-item1">
+							<p class="title">关于商城</p>
+							<p class="remark">
+								360商城是奇虎360公司的官方电商平台，主要经营
+								360安全智能设备，以及相关领域消费品。提供最新
+								的360智能设备，最贴心的售后服务，360社区一手
+								评测资讯，享受360安全、安心、放心的购物体验。
+							</p>
+							<div class="about-we">
+								<p>关于我们</p>
+								<img src="./img/wx.png" alt="">
+								<img src="./img/xl.png" alt="">
+
+							</div>
+						</div>
+						<div class="left-item2">
+							<p class="title">售后服务</p>
+							<ul>
+								<li>7日无理由退货</li>
+								<li>质量问题15日内换货</li>
+								<li>保修条款</li>
+								<li>服务流程</li>
+								<li>许可协议</li>
+								<li>隐私政策</li>
+							</ul>
+						</div>
+					</div>
+					<div class="item-right">
+						<div class="right-item1">
+							<p class="title">帮助中心</p>
+							<ul>
+								<li>用户注册</li>
+								<li>会员说明</li>
+								<li>登录与密码找回</li>
+								<li>购买指南</li>
+								<li>支付方式</li>
+								<li>配送与说明</li>
+							</ul>
+						</div>
+						<div class="right-item2">
+							<p class="title">联系我们</p>
+							<div class="remark"> </div>
+							<p class="mobile">400-123-1234</p>
+							<p class="time">周一至周日 9:00-18:00（仅收市话费）</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 模块九 底部链接 -->
+			<div class="modle9-bottom">
+				<p class="item1"> ©2019-2021 yijiequan.cn版权所有 </p>
+				<p class="item2">京ICP备08010314号-6</p>
+				<p class="item3">公司名称：医界网络科技（安徽）有限公司 | 社会统一信用代码：91110105336460203N</p>
+			</div>
+		</div>
+
+	</body>
+	<!-- 引入组件库 -->
+	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+	<script>
+		new Vue({
+			el: '#app',
+			data: function() {
+				return {
+					options: [{
+						value: '1',
+						label: '设备'
+					}, {
+						value: '2',
+						label: '维修服务'
+					}],
+					searchData: {
+						item: '1',
+						key: ''
+					},
+					isShow: false,
+					brandList: [{
+							id: '1',
+							name: '西门子'
+						},
+						{
+							id: '2',
+							name: '东软'
+						},
+						{
+							id: '3',
+							name: '万东'
+						},
+						{
+							id: '4',
+							name: '安科'
+						},
+						{
+							id: '5',
+							name: '明峰'
+						},
+						{
+							id: '6',
+							name: '万东'
+						},
+						{
+							id: '7',
+							name: '新奥博伟'
+						},
+						{
+							id: '8',
+							name: '鑫高益'
+						},
+						{
+							id: '9',
+							name: '贝斯达'
+						},
+
+						{
+							id: '10',
+							name: '开普/宽腾'
+						}
+
+					],
+					classDatas: [{
+							id: '1',
+							name: '分子影像成像系统',
+							childers: [{
+									id: '1-1',
+									name: '英特拉阿奇瓦 1.5T'
+								},
+								{
+									id: '1-2',
+									name: '全景0.23T'
+								},
+								{
+									id: '1-3',
+									name: '全景1.0T'
+								},
+								{
+									id: '1-4',
+									name: '多瓦 1.5T'
+								},
+								{
+									id: '1-5',
+									name: '英特拉 1.5T'
+								},
+								{
+									id: '1-6',
+									name: '英特网'
+								},
+								{
+									id: '1-7',
+									name: '全景1.0T'
+								},
+								{
+									id: '1-8',
+									name: '多瓦 1.5T'
+								},
+								{
+									id: '1-9',
+									name: '英特拉 1.5T'
+								},
+								{
+									id: '1-10',
+									name: '英特网'
+								},
+								{
+									id: '1-11',
+									name: '全景1.0T'
+								},
+								{
+									id: '1-12',
+									name: '多瓦 1.5T'
+								}
+							]
+						},
+						{
+							id: '1',
+							name: '分子影像成像系统',
+							childers: [{
+									id: '1-1',
+									name: '英特拉阿奇瓦 1.5T'
+								},
+								{
+									id: '1-2',
+									name: '全景0.23T'
+								},
+								{
+									id: '1-3',
+									name: '全景1.0T'
+								},
+								{
+									id: '1-4',
+									name: '多瓦 1.5T'
+								},
+								{
+									id: '1-5',
+									name: '英特拉 1.5T'
+								},
+								{
+									id: '1-6',
+									name: '英特网'
+								},
+								{
+									id: '1-7',
+									name: '全景1.0T'
+								},
+								{
+									id: '1-8',
+									name: '多瓦 1.5T'
+								},
+								{
+									id: '1-9',
+									name: '英特拉 1.5T'
+								},
+								{
+									id: '1-10',
+									name: '英特网'
+								},
+								{
+									id: '1-11',
+									name: '全景1.0T'
+								},
+								{
+									id: '1-12',
+									name: '多瓦 1.5T'
+								}
+							]
+						},
+						{
+							id: '1',
+							name: '分子影像成像系统',
+							childers: [{
+									id: '1-1',
+									name: '英特拉阿奇瓦 1.5T'
+								},
+								{
+									id: '1-2',
+									name: '全景0.23T'
+								},
+								{
+									id: '1-3',
+									name: '全景1.0T'
+								},
+								{
+									id: '1-4',
+									name: '多瓦 1.5T'
+								},
+								{
+									id: '1-5',
+									name: '英特拉 1.5T'
+								},
+								{
+									id: '1-6',
+									name: '英特网'
+								},
+								{
+									id: '1-7',
+									name: '全景1.0T'
+								},
+								{
+									id: '1-8',
+									name: '多瓦 1.5T'
+								},
+								{
+									id: '1-9',
+									name: '英特拉 1.5T'
+								},
+								{
+									id: '1-10',
+									name: '英特网'
+								},
+								{
+									id: '1-11',
+									name: '全景1.0T'
+								},
+								{
+									id: '1-12',
+									name: '多瓦 1.5T'
+								}
+							]
+						},
+						{
+							id: '1',
+							name: '分子影像成像系统',
+							childers: [{
+									id: '1-1',
+									name: '英特拉阿奇瓦 1.5T'
+								},
+								{
+									id: '1-2',
+									name: '全景0.23T'
+								},
+								{
+									id: '1-3',
+									name: '全景1.0T'
+								},
+								{
+									id: '1-4',
+									name: '多瓦 1.5T'
+								},
+								{
+									id: '1-5',
+									name: '英特拉 1.5T'
+								},
+								{
+									id: '1-6',
+									name: '英特网'
+								},
+								{
+									id: '1-7',
+									name: '全景1.0T'
+								},
+								{
+									id: '1-8',
+									name: '多瓦 1.5T'
+								},
+								{
+									id: '1-9',
+									name: '英特拉 1.5T'
+								},
+								{
+									id: '1-10',
+									name: '英特网'
+								},
+								{
+									id: '1-11',
+									name: '全景1.0T'
+								},
+								{
+									id: '1-12',
+									name: '多瓦 1.5T'
+								}
+							]
+						},
+						{
+							id: '1',
+							name: '分子影像成像系统',
+							childers: [{
+									id: '1-1',
+									name: '英特拉阿奇瓦 1.5T'
+								},
+								{
+									id: '1-2',
+									name: '全景0.23T'
+								},
+								{
+									id: '1-3',
+									name: '全景1.0T'
+								},
+								{
+									id: '1-4',
+									name: '多瓦 1.5T'
+								},
+								{
+									id: '1-5',
+									name: '英特拉 1.5T'
+								},
+								{
+									id: '1-6',
+									name: '英特网'
+								},
+								{
+									id: '1-7',
+									name: '全景1.0T'
+								},
+								{
+									id: '1-8',
+									name: '多瓦 1.5T'
+								},
+								{
+									id: '1-9',
+									name: '英特拉 1.5T'
+								},
+								{
+									id: '1-10',
+									name: '英特网'
+								},
+								{
+									id: '1-11',
+									name: '全景1.0T'
+								},
+								{
+									id: '1-12',
+									name: '多瓦 1.5T'
+								}
+							]
+						},
+						{
+							id: '1',
+							name: '分子影像成像系统',
+							childers: [{
+									id: '1-1',
+									name: '英特拉阿奇瓦 1.5T'
+								},
+								{
+									id: '1-2',
+									name: '全景0.23T'
+								},
+								{
+									id: '1-3',
+									name: '全景1.0T'
+								},
+								{
+									id: '1-4',
+									name: '多瓦 1.5T'
+								},
+								{
+									id: '1-5',
+									name: '英特拉 1.5T'
+								},
+								{
+									id: '1-6',
+									name: '英特网'
+								},
+								{
+									id: '1-7',
+									name: '全景1.0T'
+								},
+								{
+									id: '1-8',
+									name: '多瓦 1.5T'
+								},
+								{
+									id: '1-9',
+									name: '英特拉 1.5T'
+								},
+								{
+									id: '1-10',
+									name: '英特网'
+								},
+								{
+									id: '1-11',
+									name: '全景1.0T'
+								},
+								{
+									id: '1-12',
+									name: '多瓦 1.5T'
+								}
+							]
+						}
+					],
+					data5List: [{
+							id: '1',
+							imgPath: '',
+							name: '核磁共振专业资深工程师专业维修上门售后',
+							price: '￥999',
+							address: '合肥'
+						},
+						{
+							id: '2',
+							imgPath: '',
+							name: '核磁共振专业资深工程师专业维修上门售后',
+							price: '￥999',
+							address: '合肥'
+						},
+						{
+							id: '3',
+							imgPath: '',
+							name: '核磁共振专业资深工程师专业维修上门售后',
+							price: '￥999',
+							address: '合肥'
+						},
+						{
+							id: '4',
+							imgPath: '',
+							name: '核磁共振专业资深工程师专业维修上门售后',
+							price: '￥999',
+							address: '合肥'
+						},
+					],
+					data4List: [{
+							id: '1',
+							imgPath: '',
+							name: '核磁共振专业资深工程师专业维修上门售后',
+							price: '￥999',
+							address: '合肥'
+						},
+						{
+							id: '2',
+							imgPath: '',
+							name: '核磁共振专业资深工程师专业维修上门售后',
+							price: '￥999',
+							address: '合肥'
+						},
+						{
+							id: '3',
+							imgPath: '',
+							name: '核磁共振专业资深工程师专业维修上门售后',
+							price: '￥999',
+							address: '合肥'
+						},
+						{
+							id: '4',
+							imgPath: '',
+							name: '核磁共振专业资深工程师专业维修上门售后',
+							price: '￥999',
+							address: '合肥'
+						},
+						{
+							id: '5',
+							imgPath: '',
+							name: '核磁共振专业资深工程师专业维修上门售后',
+							price: '￥999',
+							address: '合肥'
+						},
+					],
+					selectIndex: '-1',
+					chooseItemData: [{
+							id: '1',
+							name: 'MRI'
+						},
+						{
+							id: '2',
+							name: 'CT'
+						},
+						{
+							id: '3',
+							name: 'PET/ct'
+						},
+						{
+							id: '4',
+							name: 'X-线'
+						},
+						{
+							id: '5',
+							name: 'DR'
+						},
+						{
+							id: '6',
+							name: '血压仪'
+						},
+						{
+							id: '7',
+							name: '探测仪'
+						},
+						{
+							id: '8',
+							name: '超声波'
+						},
+					],
+					equipLists: [{
+							id: '1',
+							name: '骨密度器',
+							remark: '提供90天保修',
+							imgPath: './assets/images/index/equip1.png'
+						},
+						{
+							id: '2',
+							name: '骨密度器',
+							remark: '提供90天保修',
+							imgPath: '../../assets/images/index/equip1.png'
+						},
+						{
+							id: '3',
+							name: '骨密度器',
+							remark: '提供90天保修',
+							imgPath: '../../assets/images/index/equip1.png'
+						},
+						{
+							id: '4',
+							name: '骨密度器',
+							remark: '提供90天保修',
+							imgPath: '../../assets/images/index/equip1.png'
+						},
+						{
+							id: '5',
+							name: '骨密度器',
+							remark: '提供90天保修',
+							imgPath: '../../assets/images/index/equip1.png'
+						},
+						{
+							id: '6',
+							name: '骨密度器',
+							remark: '提供90天保修',
+							imgPath: '../../assets/images/index/equip1.png'
+						},
+						{
+							id: '7',
+							name: '骨密度器',
+							remark: '提供90天保修',
+							imgPath: '../../assets/images/index/equip1.png'
+						},
+						{
+							id: '8',
+							name: '骨密度器',
+							remark: '提供90天保修',
+							imgPath: '../../assets/images/index/equip1.png'
+						},
+						{
+							id: '9',
+							name: '骨密度器',
+							remark: '提供90天保修',
+							imgPath: '../../assets/images/index/equip1.png'
+						}
+					]
+				}
+			},
+			methods: {
+				enterClass(id) {
+					//根据id去请求classDatas数据
+					this.isShow = true
+				},
+				leaveClass() {
+					this.isShow = false
+				},
+				chooseClick(key) {
+					console.log('key', key);
+					this.selectIndex = key;
+				}
+			},
+		})
+	</script>
+
+</html>
